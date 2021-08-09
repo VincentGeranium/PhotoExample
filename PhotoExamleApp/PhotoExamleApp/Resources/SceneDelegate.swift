@@ -56,10 +56,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func createMasterNavigationController () -> UINavigationController {
         let masterTableViewController = MasterTableViewController()
-        masterTableViewController.title = "Master"
+        masterTableViewController.title = "Photos"
         
         return UINavigationController(rootViewController: masterTableViewController)
     }
+    
+    private func de
     
     
 
