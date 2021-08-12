@@ -9,7 +9,7 @@ import UIKit
 
 class SmartAlbumsAndUserCollectionsTableViewCell: UITableViewCell {
     
-    static let cellIdentifier = CellIdentifier.collection.rawValue
+    static let cellIdentifire = CellIdentifier.collection.rawValue
 
     override func awakeFromNib() {
         super.awakeFromNib()

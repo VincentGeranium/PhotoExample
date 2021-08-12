@@ -53,6 +53,7 @@ class MasterTableViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = addButton
         
         self.tableView.register(AllPhotosTableViewCell.self, forCellReuseIdentifier: AllPhotosTableViewCell.cellIdentifire)
+        self.tableView.register(SmartAlbumsAndUserCollectionsTableViewCell.self, forCellReuseIdentifier: SmartAlbumsAndUserCollectionsTableViewCell.cellIdentifire)
         
         // Create a PHFetchResult objcet for each section in the table view.
         configurePHFetchOptions()
@@ -67,6 +68,11 @@ class MasterTableViewController: UITableViewController {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.clearsSelectionOnViewWillAppear = self.splitViewController!.isCollapsed
+        super.viewWillAppear(animated)
+        
+    }
     /// To list all the user’s albums and collections, the app creates a PHFetchOptions object and dispatches several fetch requests
     private func configurePHFetchOptions() {
         /// A set of options that affect the filtering, sorting, and management of results that Photos returns when you fetch asset or collection objects.
@@ -122,6 +128,8 @@ class MasterTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    // MARK: Segues -> 이 파트를 notification center를 사용하여 각 뷰에 observer를 할당하여야 함.
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
@@ -156,6 +164,23 @@ class MasterTableViewController: UITableViewController {
             print("Success : \(TableViewCellError.SuccessToGetTableViewCell)")
             cell.textLabel?.text = NSLocalizedString("All Photos", comment: "")
             return cell
+        case .smartAlbums:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.collection.rawValue, for: indexPath)
+            /*
+             c.f: 'object(at:)' method is kind of return?
+             object(at: ) is 'Returns the object located at the specified index.'
+             */
+            if let collection = smartAlbums?.object(at: indexPath.row) {
+                cell.textLabel?.text = collection.localizedTitle
+            }
+            return cell
+        case .userCollections:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier.collection.rawValue, for: indexPath)
+            if let collection = userCollections?.object(at: indexPath.row) {
+                cell.textLabel?.text = collection.localizedTitle
+            }
+            return cell
+            
         default:
             print("Error occur: \(TableViewCellError.FailedToGetTableViewCell)")
             break

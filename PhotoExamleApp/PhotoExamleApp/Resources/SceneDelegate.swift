@@ -61,7 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return UINavigationController(rootViewController: masterTableViewController)
     }
     
-    private func de
+    
     
     
 

@@ -8,6 +8,5 @@
 import Foundation
 
 enum CellIdentifier: String {
-    case allPhotos = "allPhotos"
-    case collection = "collection"
+    case allPhotos, collection
 }
