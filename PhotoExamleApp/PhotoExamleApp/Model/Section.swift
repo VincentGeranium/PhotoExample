@@ -2,17 +2,15 @@
 //  Section.swift
 //  PhotoExamleApp
 //
-//  Created by 김광준 on 2021/08/09.
+//  Created by 김광준 on 2021/08/12.
 //
 
 import Foundation
-import UIKit
 
-// MARK:- Types for managing sections
 enum Section: Int {
     case allPhotos = 0
     case smartAlbums = 1
-    case userCollections = 2
+    case userCollection = 2
     
     static let count = 3
 }

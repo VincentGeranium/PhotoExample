@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         
         // setup root viewcontroller
-        window?.rootViewController = createSplitViewController()
+        window?.rootViewController = masterViewController()
         window?.makeKeyAndVisible()
     }
 
@@ -54,23 +54,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
     
-    private func createMasterNavigationController () -> UINavigationController {
-        let masterTableViewController = MasterTableViewController()
-        masterTableViewController.title = "Photos"
-        
-        return UINavigationController(rootViewController: masterTableViewController)
+    
+    private func masterViewController() -> UINavigationController {
+        let masterViewController = UINavigationController()
+        masterViewController.setViewControllers([MasterViewController()], animated: false)
+        return masterViewController
     }
     
-    
-    
-    
-
-    private func createSplitViewController() -> UISplitViewController {
-        let splitViewController = UISplitViewController()
-        splitViewController.viewControllers = [
-            createMasterNavigationController()
-        ]
-        return splitViewController
-    }
 }
 
