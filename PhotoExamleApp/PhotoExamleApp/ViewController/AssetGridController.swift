@@ -2,18 +2,17 @@
 //  AssetGridViewController.swift
 //  PhotoExamleApp
 //
-//  Created by 김광준 on 2021/08/16.
+//  Created by 김광준 on 2021/08/12.
 //
 
 import UIKit
 
-class AssetGridViewController: UIViewController {
+class AssetGridController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .systemPink
-        print("This is AssetGridViewController")
+        self.view.backgroundColor = .systemGray
     }
     
 

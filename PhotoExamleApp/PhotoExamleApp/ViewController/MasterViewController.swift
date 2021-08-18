@@ -15,6 +15,7 @@ class MasterViewController: UIViewController {
     var smartAlbums: PHFetchResult<PHAssetCollection>?
     var userCollections: PHFetchResult<PHCollection>?
     
+    var returnSection = 0
     /*
      c.f: Peurpose of 'sectionLocailzedTitles'
      This property that array type is will use for table view section titles.
@@ -28,6 +29,8 @@ class MasterViewController: UIViewController {
         tableView.register(MasterTableViewCell.self, forCellReuseIdentifier: MasterTableViewCell.cellIdentifier)
         return tableView
     }()
+    
+    
     
     // MARK:- NavigationBarButton property
     /*
@@ -49,12 +52,37 @@ class MasterViewController: UIViewController {
         masterTableView.dataSource = self
         self.view.backgroundColor = .white
         self.navigationItem.rightBarButtonItem = addButton
+        createPHFetchResultObject()
+
         view.addSubview(masterTableView)
     }
     
     // Called to notify the view controller that its view has just laid out its subviews.
     override func viewDidLayoutSubviews() {
         masterTableView.frame = view.bounds
+    }
+    
+    private func createPHFetchResultObject() {
+        let allPhotosOptions = PHFetchOptions()
+        allPhotosOptions.sortDescriptors = [
+            NSSortDescriptor(key: "creationDate", ascending: true)
+        ]
+        
+        guard var allPhotos = self.allPhotos,
+              var smartAlbums = self.smartAlbums,
+              var userCollections = self.userCollections else {
+            return
+        }
+        
+        allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
+        
+        smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum,
+                                                              subtype: .albumRegular,
+                                                              options: nil)
+        
+        userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
+        PHPhotoLibrary.shared().register(self)
+        
     }
     
     @objc private func addAlbum() {
@@ -70,7 +98,27 @@ extension MasterViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        
+        if let allPhotos = allPhotos,
+           let smartAlbums = smartAlbums,
+           let userCollections = userCollections {
+            switch Section(rawValue: section) {
+            case .allPhotos:
+                returnSection = 1
+                return returnSection
+            case .smartAlbums:
+                returnSection = smartAlbums.count
+                return returnSection
+            case .userCollection:
+                returnSection = userCollections.count
+                return returnSection
+            case .none:
+                print("Error: Can't get Section raw value")
+                return 0
+            }
+           
+        }
+        return returnSection
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -82,6 +130,21 @@ extension MasterViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MasterTableViewCell.cellIdentifier, for: indexPath)
         cell.textLabel?.text = "asd"
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let assetGridVC = AssetGridViewController()
+        present(assetGridVC, animated: true) {
+            print("Success to present assetGridVC")
+        }
+    }
+    
+    
+}
+
+extension MasterViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        print("have to write the code")
     }
     
     
